@@ -4,6 +4,7 @@ import CreateUserUseCase from "../../../business/useCases/user/CreateUserUseCase
 import InputCreateUserSerializer from "../../serializers/user/input/InputCreateUserSerializer"
 import { left } from "../../../shared/either"
 import { OutputCreateUserController } from "../../dto/user/create"
+import PublicUser from "../../serializers/user/output/PublicUser"
 
 @injectable()
 export default class CreateUserController extends AbstractController<
@@ -25,6 +26,8 @@ export default class CreateUserController extends AbstractController<
       return left(either.value)
     }
 
-    return this.createUserUseCase.execute(input)
+    return (await this.createUserUseCase.execute(input)).applyOnRight((user) =>
+      this.hideFields(PublicUser, user)
+    )
   }
 }

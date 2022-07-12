@@ -1,8 +1,13 @@
 import { injectable } from "inversify"
+import { plainToInstance } from "class-transformer"
 import { Either, left, right } from "../../shared/either"
 import ValidationErrors from "../../business/errors/ValidationErrors"
 import { AbstractSerializer } from "../serializers/AbstractSerializer"
 import { Err } from "../../shared/Err"
+
+type ClassConstructor<T> = {
+  new (...args: unknown[]): T
+}
 
 @injectable()
 export default abstract class AbstractController<
@@ -29,5 +34,11 @@ export default abstract class AbstractController<
     }
 
     return right(undefined)
+  }
+
+  protected hideFields<T>(cls: ClassConstructor<T>, obj: T): T
+  protected hideFields<T>(cls: ClassConstructor<T>, obj: T[]): T[]
+  protected hideFields<T>(cls: ClassConstructor<T>, obj: T | T[]): T | T[] {
+    return plainToInstance(cls, obj)
   }
 }
