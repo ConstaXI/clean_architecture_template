@@ -1,0 +1,65 @@
+service: clean-api-auth
+
+frameworkVersion: '3.20.0'
+
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  lambdaHashingVersion: 20201221
+  stage: ${opt:stage, "${env:stage, 'dev'}"}
+  memorySize: 256
+  timeout: 10
+  apiGateway:
+    binaryMediaTypes:
+      - '*/*'
+  region: us-east-2
+ENVIRONMENT_REPLACE:
+
+resources:
+  Resources:
+    GatewayResponse:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: EXPIRED_TOKEN
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+        StatusCode: '401'
+
+custom:
+  baseAuthorizer:
+    name: mainCustomAuth
+    resultTtlInSeconds: 300
+  localAuthorizer:
+    name: mainCustomAuth
+    type: token
+  functionsDir: src/main/functions
+  serverless-offline:
+    httpPort: 3000
+    lambdaPort: 4000
+  webpack:
+    webpackConfig: 'webpack.config.js'
+    includeModules:
+      forceInclude:
+        # force include of your db drivers here
+        - pg
+    excludeFiles: tests/**
+  apigwBinary:
+    types:
+      - 'multipart/form-data'
+  prune:
+    automatic: true
+    includeLayers: true
+    number: 3
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+  - serverless-offline-local-authorizers-plugin
+
+functions:
+  - ${file(${self:custom.functionsDir}/users/users.yml)}
