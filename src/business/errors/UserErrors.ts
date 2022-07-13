@@ -3,13 +3,12 @@ import { Err } from "../../shared/Err"
 export default class UserErrors extends Err {
   type: "USER_ERRORS"
 
-  static entityCreationError(details: unknown) {
+  static notFound() {
     return new UserErrors({
-      statusCode: 400,
+      statusCode: 404,
       body: {
-        code: "USER_CREATION_ERROR",
-        message: "User creation error",
-        details,
+        code: "USER_NOT_FOUND_ERROR",
+        message: "A user with the given conditions was not found",
       },
     })
   }

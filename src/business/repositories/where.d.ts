@@ -1,4 +1,3 @@
-export type Where<C, V> = {
-  column: C
-  value: V
+export type Where<E> = {
+  [Key in keyof E]: E[Key]
 }
