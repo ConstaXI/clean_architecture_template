@@ -10,6 +10,8 @@ import { IHashServiceToken } from "../../../../src/business/services/hasher/iHas
 import { FakeHashService } from "../../../mock/services/fakeHashService"
 import { IUniqueIdentifierServiceToken } from "../../../../src/business/services/uniqueIdentifier/iUniqueIdentifier"
 import { FakeUniqueIdentifierService } from "../../../mock/services/fakeUniqueIdentifierService"
+import { left } from "../../../../src/shared/either"
+import UserErrors from "../../../../src/business/errors/UserErrors"
 
 describe("CreateUserUseCase", () => {
   beforeAll(() => {
@@ -43,5 +45,14 @@ describe("CreateUserUseCase", () => {
       }
     )
     expect(either.isRight()).toBeTruthy()
+  })
+
+  test("Should move left errors forward", async () => {
+    const error = UserErrors.notFound()
+    const useCase = container.get(CreateUserUseCase)
+    fakeUserRepositoryCreate.mockResolvedValueOnce(left(error))
+    const either = await useCase.execute(fakeCreateUserInput)
+    expect(either.isLeft()).toBeTruthy()
+    expect(either.value).toBe(error)
   })
 })
