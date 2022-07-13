@@ -10,6 +10,10 @@ import {
 } from "../../repositories/interfaces/iUserRepository"
 import { IHashService, IHashServiceToken } from "../../services/hasher/iHasher"
 import { User } from "../../../domain/entities/User"
+import {
+  IUniqueIdentifierService,
+  IUniqueIdentifierServiceToken,
+} from "../../services/uniqueIdentifier/iUniqueIdentifier"
 
 @injectable()
 export default class CreateUserUseCase extends AbstractUseCase<
@@ -18,7 +22,9 @@ export default class CreateUserUseCase extends AbstractUseCase<
 > {
   constructor(
     @inject(IUserRepositoryToken) private userRepository: IUserRepository,
-    @inject(IHashServiceToken) private hashService: IHashService
+    @inject(IHashServiceToken) private hashService: IHashService,
+    @inject(IUniqueIdentifierServiceToken)
+    private uniqueIdentifierService: IUniqueIdentifierService
   ) {
     super()
   }
@@ -30,6 +36,7 @@ export default class CreateUserUseCase extends AbstractUseCase<
 
     const user = User.create({
       ...input,
+      uuid: this.uniqueIdentifierService.create(),
       password: hashPassword,
     })
 

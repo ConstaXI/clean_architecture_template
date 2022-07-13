@@ -1,6 +1,6 @@
 import { injectable } from "inversify"
 import bcrypt, { genSalt } from "bcryptjs"
-import { IHashService } from "../../business/services/hasher/iHasher"
+import { IHashService } from "../../../business/services/hasher/iHasher"
 
 @injectable()
 export class HashService implements IHashService {

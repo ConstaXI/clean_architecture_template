@@ -4,6 +4,8 @@ import UserErrors from "../../errors/UserErrors"
 
 export const IUserRepositoryToken = Symbol.for("IUserRepositoryToken")
 
+type CreateOutput = Either<UserErrors, IUser>
+
 export interface IUserRepository {
-  create(user: InputCreateUser): Promise<Either<UserErrors, IUser>>
+  create(user: InputCreateUser): Promise<CreateOutput>
 }

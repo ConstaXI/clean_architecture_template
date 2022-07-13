@@ -27,7 +27,7 @@ export default class CreateUserController extends AbstractController<
     }
 
     return (await this.createUserUseCase.execute(input)).applyOnRight((user) =>
-      this.hideFields(PublicUser, user)
+      this.format(PublicUser, user)
     )
   }
 }

@@ -14,7 +14,7 @@ export interface IUser extends Timestamps, SoftDelete {
 
 export type InputCreateUser = Pick<
   IUser,
-  "email" | "firstName" | "surname" | "password"
+  "email" | "firstName" | "surname" | "password" | "uuid"
 >
 
 export class User extends AbstractEntity<IUser> {
@@ -24,7 +24,6 @@ export class User extends AbstractEntity<IUser> {
     const user = new User({
       ...props,
       id: undefined,
-      uuid: undefined,
       createdAt: currentDate,
       updatedAt: currentDate,
       deletedAt: undefined,

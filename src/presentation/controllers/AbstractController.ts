@@ -36,9 +36,9 @@ export default abstract class AbstractController<
     return right(undefined)
   }
 
-  protected hideFields<T>(cls: ClassConstructor<T>, obj: T): T
-  protected hideFields<T>(cls: ClassConstructor<T>, obj: T[]): T[]
-  protected hideFields<T>(cls: ClassConstructor<T>, obj: T | T[]): T | T[] {
+  protected format<T>(cls: ClassConstructor<T>, obj: T): T
+  protected format<T>(cls: ClassConstructor<T>, obj: T[]): T[]
+  protected format<T>(cls: ClassConstructor<T>, obj: T | T[]): T | T[] {
     return plainToInstance(cls, obj)
   }
 }
