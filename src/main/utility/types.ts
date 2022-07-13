@@ -5,9 +5,8 @@ import {
 } from "aws-lambda"
 
 export interface ITokenPayload {
-  user_uuid: string
-
-  [index: string]: string | number
+  userUuid: string
+  [k: string]: string | number
 }
 
 export interface IRequestMethods {
