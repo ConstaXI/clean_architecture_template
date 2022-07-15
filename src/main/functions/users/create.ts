@@ -14,7 +14,7 @@ const create = async (event: IHandlerInput): Promise<IHandlerResult> => {
   const userResult = await controller.handle(input)
 
   if (userResult.isLeft()) {
-    return httpResponse("badRequest", userResult.value)
+    return httpResponse(userResult.value.statusCode, userResult.value.body)
   }
 
   return httpResponse("created", userResult.value)

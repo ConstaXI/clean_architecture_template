@@ -33,12 +33,15 @@ type HttpResponse = {
 }
 
 export const httpResponse = (
-  responseType: keyof typeof types,
+  responseType: keyof typeof types | number,
   body: unknown,
   headers?: { [K: string]: unknown },
   isBase64Encoded = false
 ): HttpResponse => ({
-  statusCode: types[responseType].statusCode,
+  statusCode:
+    typeof responseType === "number"
+      ? responseType
+      : types[responseType].statusCode,
   body: isBase64Encoded ? body : JSON.stringify(body),
   isBase64Encoded,
   headers: {
