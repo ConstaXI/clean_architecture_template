@@ -3,4 +3,5 @@ export default {
   dbUser: process.env.DB_USER || "postgres",
   dbPassword: process.env.DB_PASSWORD || "postgres",
   dbType: process.env.DB_TYPE || "postgres",
+  JwtSecret: process.env.JWT_SECRET || "secret",
 }

@@ -5,6 +5,8 @@ import InputCreateUserSerializer from "../../serializers/user/input/InputCreateU
 import { left } from "../../../shared/either"
 import { OutputCreateUserController } from "../../dto/user/create"
 import PublicUser from "../../serializers/user/output/PublicUser"
+import FindUserByUseCase from "../../../business/useCases/user/FindUserByUseCase"
+import UserErrors from "../../../business/errors/UserErrors"
 
 @injectable()
 export default class CreateUserController extends AbstractController<
@@ -12,7 +14,8 @@ export default class CreateUserController extends AbstractController<
   OutputCreateUserController
 > {
   constructor(
-    @inject(CreateUserUseCase) private createUserUseCase: CreateUserUseCase
+    @inject(CreateUserUseCase) private createUserUseCase: CreateUserUseCase,
+    @inject(FindUserByUseCase) private findUserByUseCase: FindUserByUseCase
   ) {
     super()
   }
@@ -24,6 +27,14 @@ export default class CreateUserController extends AbstractController<
 
     if (either.isLeft()) {
       return left(either.value)
+    }
+
+    const alreadyExists = await this.findUserByUseCase.execute({
+      email: input.email,
+    })
+
+    if (alreadyExists.isRight()) {
+      return left(UserErrors.alreadyExists())
     }
 
     return (await this.createUserUseCase.execute(input)).applyOnRight((user) =>

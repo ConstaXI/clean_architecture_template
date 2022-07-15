@@ -11,7 +11,7 @@ import {
 import { right } from "../../../shared/either"
 
 @injectable()
-export class CreateTokenUseCase
+export default class CreateTokenUseCase
   implements
     AbstractUseCase<InputAuthenticateUseCase, OutputAuthenticateUseCase>
 {

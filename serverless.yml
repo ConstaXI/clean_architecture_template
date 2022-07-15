@@ -49,3 +49,4 @@ plugins:
 
 functions:
   - ${file(${self:custom.functionsDir}/users/users.yml)}
+  - ${file(${self:custom.functionsDir}/authentication/auth.yml)}

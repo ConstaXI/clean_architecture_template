@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify"
 import FindUserByUseCase from "../../../business/useCases/user/FindUserByUseCase"
-import { CreateTokenUseCase } from "../../../business/useCases/authentication/CreateTokenUseCase"
+import CreateTokenUseCase from "../../../business/useCases/authentication/CreateTokenUseCase"
 import {
   IHashService,
   IHashServiceToken,
@@ -11,9 +11,10 @@ import { OutputCreateAuthentication } from "../../dto/authentication/create"
 import { left, right } from "../../../shared/either"
 import AuthenticationErrors from "../../../business/errors/AuthenticationErrors"
 import { ITokenPayload } from "../../../main/utility/types"
+import PublicUser from "../../serializers/user/output/PublicUser"
 
 @injectable()
-export class CreateAuthenticationOperator extends AbstractController<
+export class CreateAuthenticationController extends AbstractController<
   InputCreateAuthentication,
   OutputCreateAuthentication
 > {
@@ -61,7 +62,7 @@ export class CreateAuthenticationOperator extends AbstractController<
     }
 
     return right({
-      user: user.value,
+      user: this.format(PublicUser, user.value),
       token: tokenResult.value.token,
     })
   }

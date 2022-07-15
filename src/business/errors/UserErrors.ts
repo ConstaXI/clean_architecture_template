@@ -12,4 +12,14 @@ export default class UserErrors extends Err {
       },
     })
   }
+
+  static alreadyExists() {
+    return new UserErrors({
+      statusCode: 400,
+      body: {
+        code: "USER_ALREADY_EXISTS_ERROR",
+        message: "A user with the given email already exists",
+      },
+    })
+  }
 }
