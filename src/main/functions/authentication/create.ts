@@ -14,7 +14,7 @@ const create = async (event: IHandlerInput): Promise<IHandlerResult> => {
   const authenticationResult = await operator.handle(input)
 
   if (authenticationResult.isLeft()) {
-    throw authenticationResult.value
+    return httpResponse("unauthorized", authenticationResult.value.body)
   }
 
   return httpResponse("ok", authenticationResult.value)

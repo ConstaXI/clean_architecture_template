@@ -11,6 +11,12 @@ const types = {
   badRequest: {
     statusCode: 400,
   },
+  unauthorized: {
+    statusCode: 401,
+  },
+  forbidden: {
+    statusCode: 403,
+  },
   notFound: {
     statusCode: 404,
   },
